@@ -4,7 +4,7 @@ from nltk.corpus import stopwords
 stop = stopwords.words('english')
 from nltk.corpus import wordnet
 
-txt = "A fatty Vishwa, Akshat is standing"
+txt = "Vishwa, Akshat is standing"
 def nameex(txt):
     Sentences = nltk.sent_tokenize(txt)
     tokens = []
