@@ -65,7 +65,7 @@ def cat(out):
         return(util_aadhar.main_ex(out))
     
 # input file
-filename = "/home/akshatz/Downloads/ID proofs/Aadhar Card/Vishwa.jpg"
+filename = "/home/akshatz/Downloads/ID proofs/Voter ID/Suyash.jpg"
 
 # allowed filenames
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']

@@ -39,3 +39,24 @@ def age(dob):
     else:
         return(util_age.main(dob))
 
+def genex(tokenized_text):
+    """
+    In: OCR output Tokenized
+    out: Gender
+    """
+    for i in tokenized_text:
+        male = re.search("(^MA.E$|^Ma.e$)", i)
+        female = re.search("(^FEMA.E$|^Fema.e$)", i)
+        if male is not None:
+            return "Male"
+        if female is not None:
+            return "Female"
+
+
+def bloodGroup(output):
+    regex = r"\bB\+|\bB-|\bA\+|\bA-|\bAB\+|\bAB-|\bO\+|\bO-"
+    bg = re.search(regex, output)
+    if bg is None:
+        return("None")
+    else:
+        return(bg.group(0))

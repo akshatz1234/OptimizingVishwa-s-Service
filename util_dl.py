@@ -1,5 +1,5 @@
 import commonUtility
-        
+import re        
 def reg(output):
     """
     In: OCR output(specifically back)
@@ -19,7 +19,7 @@ def addex(c3):
     In: Proccesed text
     Out: Address
     """
-    tkn_add = word_tokenize(reg(c3))
+    tkn_add = commonUtility.word_tokenize(reg(c3))
     add = " "
     y = 0
     pin = re.compile('^\d{6}$')
@@ -33,24 +33,16 @@ def addex(c3):
             y = 0
     return(add)
 
-def bloodGroup(output):
-    regex = r"\bB\+|\bB-|\bA\+|\bA-|\bAB\+|\bAB-|\bO\+|\bO-"
-    bg = re.search(regex, output)
-    if bg is None:
-        return("None")
-    else:
-        return(bg.group(0))
-
         
 def main_ex(output):
-    tokenized_text = word_tokenize(output)
-    classified_text = st.tag(tokenized_text)
+    tokenized_text = commonUtility.word_tokenize(output)
+    classified_text = commonUtility.st.tag(tokenized_text)
     data = {}
-    data['name'] = nameex(classified_text)
-    data['dob'] = dateex(output)[1]
-    data['age'] = dateex(output)[0]
+    data['name'] = commonUtility.nameex(classified_text)
+    data['dob'] = commonUtility.dateex(output)[1]
+    data['age'] = commonUtility.dateex(output)[0]
     data['docType'] = "Driving Licence"
     data['address'] = addex(reg(output))
     data['gender'] = ""
-    data['bloodGroup'] = bloodGroup(output)
-    return jsonify(data)
+    data['bloodGroup'] = commonUtility.bloodGroup(output)
+    return commonUtility.jsonify(data)
