@@ -40,9 +40,8 @@ def main_ex(output):
     data = {}
     data['name'] = commonUtility.nameex(classified_text)
     data['dob'] = commonUtility.dateex(output)[1]
-    data['age'] = commonUtility.dateex(output)[0]
+    data['age'] = commonUtility.age(dateex(output)[0])
     data['docType'] = "Driving Licence"
     data['address'] = addex(reg(output))
-    data['gender'] = ""
     data['bloodGroup'] = commonUtility.bloodGroup(output)
     return commonUtility.jsonify(data)
