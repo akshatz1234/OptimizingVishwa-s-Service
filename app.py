@@ -2,7 +2,7 @@ from main import rear as rear
 from flask import Flask, request
 
 app = Flask(__name__)
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/docClassifier", methods=['GET', 'POST'])
 def main():
     return rear()
 

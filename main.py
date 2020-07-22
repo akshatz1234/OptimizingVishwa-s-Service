@@ -17,7 +17,6 @@ ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 
 # function to denote allowed file formats-jpg, jpeg and png
 def allowed_file(file):
-    print( ('.' in file and file.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS))
     return ('.' in file and file.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS)
 
 # main Function
@@ -26,13 +25,14 @@ app = Flask(__name__)
 def rear():
     # file- input image
     f = request.files['file']
-    if not allowed_file(f):
+    try: 
+        allowed_file(f)
         f.save("/home/akshatz/Documents/project/temp1.jpg")
         img = Image.open(f)
         img.load()
         text = pytesseract.image_to_string(img)
         return cat(text)
-    else: 
+    except: 
         return ("Cannot read image, Please enter valid image type-jpg,jpeg and png ")
 
 # categorization
