@@ -1,9 +1,13 @@
 from datetime import datetime
+from flask import Response
 
 def calc_age(dob):
-    date = datetime.strptime(dob, "%d-%m-%Y")
-    today = date.today()
-    return today.year - date.year - ((today.month, today.day) < (date.month, date.day))
+    try:
+        date = datetime.strptime(dob, "%d-%m-%Y")
+        today = date.today()
+        return today.year - date.year - ((today.month, today.day) < (date.month, date.day))
+    except:
+        return None
 
 def clean(dob):
     if len(dob)==4:

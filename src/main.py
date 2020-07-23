@@ -1,8 +1,8 @@
 import pytesseract
-from flask import Flask, request
+from flask import Flask, request, Response
 import numpy as np
 from PIL import Image, ImageEnhance
-import cv2
+import cv2 as cv
 import re
 import imutils
 import util_aadhar
@@ -12,28 +12,29 @@ import util_vi
 import util_pass
 import util_other
 
-# allowed filenames
-ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
+def preprocess(path):
+    img = cv.imread(path,0)
+    blurred = cv.blur(img, (3,3))
+    canny = cv.Canny(blurred, 50, 200)
+    pts = np.argwhere(canny>0)
+    y1,x1 = pts.min(axis=0)
+    y2,x2 = pts.max(axis=0)
+    cropped = img[y1:y2, x1:x2]
+    imS = imutils.resize(cropped, width=950)
+    cv.imwrite('../project/temp1.jpg',imS);
+    image = Image.open('../project/temp1.jpg')
+    enhancer = ImageEnhance.Brightness(image)
+    enhanced_im = enhancer.enhance(1.7)
+    con = ImageEnhance.Contrast(enhanced_im)
+    con1 = con.enhance(1.3)
+    enhancer_object = ImageEnhance.Sharpness(con1)
+    out = enhancer_object.enhance(3)
+    out.save("../project/t2.jpg")
+    #    out.show()
+    i = cv.imread("../project/t2.jpg",0)
+    output = pytesseract.image_to_string(i, lang='eng')
+    return(output)
 
-# function to denote allowed file formats-jpg, jpeg and png
-def allowed_file(file):
-    return ('.' in file and file.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS)
-
-# main Function
-app = Flask(__name__)
-# @app.route("/card", methods=['GET', 'POST'])
-def rear():
-    # file- input image
-    f = request.files['file']
-    try: 
-        allowed_file(f)
-        f.save("/home/akshatz/Documents/project/temp1.jpg")
-        img = Image.open(f)
-        img.load()
-        text = pytesseract.image_to_string(img)
-        return cat(text)
-    except: 
-        return ("Cannot read image, Please enter valid image type-jpg,jpeg and png ")
 
 # categorization
 def cat(out):
@@ -45,7 +46,7 @@ def cat(out):
             if num is None:
                 num = re.search("ELECTION", out)#voter id
                 if num is None:
-                    num = re.search("([A-Z]{2}[0-9]{2} [0-9]{10})", out)#driving license
+                    num = re.search("([A-Z]{2}[0-9]{2}-[0-9]{11})", out)#driving license
                     if num is None:
                         word = re.search("Permanent",out)# PAN card
                         if word is None:
@@ -62,3 +63,24 @@ def cat(out):
             return(util_pan.main_ex(out))
     else:
         return(util_aadhar.main_ex(out))
+
+# allowed filenames
+ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
+
+# function to denote allowed file formats-jpg, jpeg and png
+def allowed_file(file):
+    return ('.' in file and file.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS)
+
+# main Function
+app = Flask(__name__)
+def rear():
+    f = request.files['file']
+    f.save("../project/temp1.jpg")
+    try:
+        allowed_file(f)
+        img = Image.open(f)
+        img.load()
+        return cat(preprocess('../project/temp1.jpg')) 
+    except:
+        return "Cannot read file"
+    

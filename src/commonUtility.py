@@ -20,7 +20,7 @@ def nameex(txt):
         if tag != "O" and tag == 'PERSON':
             a=" ".join(w for w, t in chunk)
             return(a)
-            break
+
 
 def dateex(output):
     """
