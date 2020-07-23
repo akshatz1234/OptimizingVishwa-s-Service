@@ -40,7 +40,7 @@ def main_ex(output):
     data = {}
     data['name'] = commonUtility.nameex(classified_text)
     data['dob'] = commonUtility.dateex(output)[1]
-    data['age'] = commonUtility.age(dateex(output)[0])
+    data['age'] = commonUtility.age(data(dob))
     data['docType'] = "Driving Licence"
     data['address'] = addex(reg(output))
     data['bloodGroup'] = commonUtility.bloodGroup(output)

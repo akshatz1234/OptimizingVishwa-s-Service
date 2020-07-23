@@ -1,3 +1,5 @@
+import time
+import os
 import pytesseract
 from flask import Flask, request
 import numpy as np
@@ -11,6 +13,35 @@ import util_dl
 import util_vi
 import util_pass
 import util_other
+
+# categorization
+def cat(out):
+    num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)#aadhaar card
+    if num is None:
+        num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)#Pan card
+        if num is None:
+            num = re.search("^(?!^0+$)[a-zA-Z0-9]{3,20}$", out)#passport
+            if num is None:
+                num = re.search("ELECTION", out)#voter id
+                if num is None:
+                    num = re.search("(A-Z]{2}[0-9]{2} [0-9]{11}", out)#driving license
+                    if num is None:
+                        word = re.search("Permanent",out)# PAN card
+                        if word is None:
+                            return(util_other.main_ex(out))
+                        else:
+                            return(util_pan.main_ex(out))
+                    else:
+                        return(util_dl.main_ex(out))
+                else:
+                    return(util_vi.main_ex(out))
+            else:
+                return(util_pass.main_ex(out))
+        else:
+            return(util_pan.main_ex(out))
+    else:
+        return(util_aadhar.main_ex(out))
+
 
 # allowed filenames
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
@@ -31,34 +62,8 @@ def rear():
         img = Image.open(f)
         img.load()
         text = pytesseract.image_to_string(img)
+        print(text)
         return cat(text)
     except: 
         return ("Cannot read image, Please enter valid image type-jpg,jpeg and png ")
 
-# categorization
-def cat(out):
-    num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)#aadhaar card
-    if num is None:
-        num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)#Pan card
-        if num is None:
-            num = re.search("^(?!^0+$)[a-zA-Z0-9]{3,20}$", out)#passport
-            if num is None:
-                num = re.search("ELECTION", out)#voter id
-                if num is None:
-                    num = re.search("([A-Z]{2}[0-9]{2} [0-9]{10})", out)#driving license
-                    if num is None:
-                        word = re.search("Permanent",out)# PAN card
-                        if word is None:
-                            return(util_other.main_ex(out))
-                        else:
-                            return(util_pan.main_ex(out))
-                    else:
-                        return(util_dl.main_ex(out))
-                else:
-                    return(util_vi.main_ex(out))
-            else:
-                return(util_pass.main_ex(out))
-        else:
-            return(util_pan.main_ex(out))
-    else:
-        return(util_aadhar.main_ex(out))
