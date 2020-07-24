@@ -44,7 +44,7 @@ def cat(out):
         if num is None:
             num = re.search("^\b[A-Z]{1}[0-9]{7}\b", out)# passport
             if num is None:
-                num = re.search("\b[A-Z]{3}[0-9]{7}", out)#voter id
+                num = re.search("ELECTION", out)
                 if num is None:
                     num = re.search("([A-Z]{2}[0-9]{2} [0-9]{11})", out)#driving license
                     if num is None:
