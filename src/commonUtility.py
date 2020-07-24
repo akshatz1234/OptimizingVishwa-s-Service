@@ -21,27 +21,30 @@ def nameex(txt):
             a=" ".join(w for w, t in chunk)
             return(a)
 
-
+# date extraction
 def dateex(output):
     """
     In: Output from the OCR
     out: Date
     """
-    date = re.search("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
-    if date is None:
-        year = re.search("(19..|20..)", output)
-        if year is None:
-            return "None"
-        else:
-            return(year.group(1))
+    date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
+    if not date:
+        pass
     else:
-        return(date.group(1))
+        a = []
+        for i in date:
+            a.append(util_age.main(i))
+        f = a.index(max(a))
+        dob = date[f]
+        if max(a) == None:
+            return dob
+        else:
+            return(max(a),dob)
         
 def age(dob):
     if dob == "None":
         return "None"
-    else:
-        return(util_age.main(dob))
+    return(util_age.main(dob))
 
 def genex(tokenized_text):
     """
