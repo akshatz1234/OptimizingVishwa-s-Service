@@ -30,7 +30,6 @@ def preprocess(path):
     enhancer_object = ImageEnhance.Sharpness(con1)
     out = enhancer_object.enhance(3)
     out.save("../project/t2.jpg")
-    #    out.show()
     i = cv.imread("../project/t2.jpg",0)
     output = pytesseract.image_to_string(i, lang='eng')
     print(output)
@@ -39,20 +38,18 @@ def preprocess(path):
 
 # categorization
 def cat(out):
-    # num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)#aadhaar card
-    # if num is None:
-    #     num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)#Pan card
+    num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)#aadhaar card
+    if num is None:
+        num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)#Pan card
         if num is None:
-            num = re.search("^\b[A-Z]{1}[0-9]{7}", out)
-            pritnt)
-            # num = re.search("^[A-Z0-9<]{9}[0-9]{1}[A-Z]{3}[0-9]{7}[A-Z]{1}[0-9]{7}[A-Z0-9<]{14}[0-9]{2}$", out)#passport
+            num = re.search("^\b[A-Z]{1}[0-9]{7}\b", out)# passport
+            if num is None:
+                num = re.search("\b[A-Z]{3}[0-9]{7}", out)#voter id
                 if num is None:
-                    num = re.search("ELECTION", out)#voter id
+                    num = re.search("([A-Z]{2}[0-9]{2} [0-9]{11})", out)#driving license
                     if num is None:
-                        num = re.search("([A-Z]{2}[0-9]{2}-[0-9]{11})", out)#driving license
-                        if num is None:
-                            word = re.search("Permanent",out)# PAN card
-                            if word is None:
+                        word = re.search("Permanent",out)# PAN card
+                        if word is None:
                             return(util_other.main_ex(out))
                         else:
                             return(util_pan.main_ex(out))
@@ -79,11 +76,11 @@ app = Flask(__name__)
 def rear():
     f = request.files['file']
     f.save("../project/temp1.jpg")
-    # try:
-    allowed_file(f)
-    img = Image.open(f)
-    img.load()
-    return cat(preprocess('../project/temp1.jpg')) 
-    # except:
-    #     return "Cannot read file"
+    try:
+        allowed_file(f)
+        img = Image.open(f)
+        img.load()
+        return cat(preprocess('../project/temp1.jpg')) 
+    except:
+        return "Cannot read file"
     
