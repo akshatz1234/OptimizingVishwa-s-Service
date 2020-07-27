@@ -10,5 +10,14 @@ def calc_age(dob):
     except:
         return None
 
+def clean(dob):
+    try:
+        if len(dob)==4:        
+            return "1-1-"+dob
+        else:
+            return(dob.replace('/','-'))
+    except:
+        return None
+
 def main(dob):
-    return(calc_age(dob))
+    return(calc_age(clean(dob)))
