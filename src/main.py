@@ -1,3 +1,6 @@
+import time
+startTime=time.time()
+endTime = time.time()
 import pytesseract
 from flask import Flask, request, Response
 import numpy as np
@@ -31,9 +34,9 @@ def preprocess(path):
     out = enhancer_object.enhance(3)
     out.save("../project/t2.jpg")
     i = cv.imread("../project/t2.jpg",0)
-    output = pytesseract.image_to_string(i, lang='eng')
-    print(output)
-    return(output)
+    text = pytesseract.image_to_string(i, lang='eng')
+    # print(text)
+    return(text)
 
 
 # categorization
@@ -42,9 +45,9 @@ def cat(out):
     if num is None:
         num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)#Pan card
         if num is None:
-            num = re.search("^\b[A-Z]{1}[0-9]{7}\b", out)# passport
+            num = re.search("^[A-PR-WYa-pr-wy][1-9]\\d \\s?\\d{4}[1-9]$", out)# passport
             if num is None:
-                num = re.search("ELECTION", out)
+                num = re.search("ELECTION", out)# Voter ID
                 if num is None:
                     num = re.search("([A-Z]{2}[0-9]{2} [0-9]{11})", out)#driving license
                     if num is None:
@@ -76,11 +79,12 @@ app = Flask(__name__)
 def rear():
     f = request.files['file']
     f.save("../project/temp1.jpg")
-    try:
-        allowed_file(f)
-        img = Image.open(f)
-        img.load()
-        return cat(preprocess('../project/temp1.jpg')) 
-    except:
-        return "Cannot read file"
+    # try:
+    startTime
+    allowed_file(f)
+    img = Image.open(f)
+    img.load()
+    return cat(preprocess('../project/temp1.jpg')) 
+    # except:
+    #     return "Cannot read file"
     

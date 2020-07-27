@@ -27,27 +27,22 @@ def dateex(output):
     In: Output from the OCR
     out: Date
     """
-    try:
-        date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
-        if not date:
-            pass
+    date = re.search("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
+    if date is None:
+        year = re.search("(19..|20..)", output)
+        if year is None:
+            return None
         else:
-            a = []
-            for i in date:
-                a.append(util_age.main(i))
-            f = a.index(max(a))
-            dob = date[f]
-            if max(a) == None:
-                return dob
-            else:
-                return(max(a),dob)
-    except:
-        return None
+            return(year.group(1))
+    else:
+        return(date.group(1))
+
 
 def age(dob):
     if dob == "None":
         return "None"
-    return(util_age.main(dob))
+    else:
+        return(util_age.main(dob))
 
 def genex(tokenized_text):
     """

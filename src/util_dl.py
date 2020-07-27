@@ -1,5 +1,25 @@
 import commonUtility
 import re        
+import util_age
+
+#date extraction
+def dateex(output):
+    """
+    In: Output from the OCR
+    out: Date
+    """
+    date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
+    if not date:
+        return(None,None)
+    else:
+        a = []
+        for i in date:
+            a.append(util_age.main(i))
+        f = a.index(max(a))
+        dob = date[f]
+        return(max(a),dob)
+
+#registration number 
 def reg(output):
     """
     In: OCR output(specifically back)
@@ -14,6 +34,7 @@ def reg(output):
     c3 = re.sub('(,\s)+', ', ', c2)
     return(c3)
 
+#address
 def addex(c3):
     """
     In: Proccesed text
@@ -39,8 +60,9 @@ def main_ex(output):
     classified_text = commonUtility.st.tag(tokenized_text)
     data = {}
     data['name'] = commonUtility.nameex(classified_text)
-    data['dob'] = commonUtility.dateex(output)[1]
-    data['age'] = commonUtility.dateex(output)[0]
+    data['dob'] = dateex(output)[1]
+    # print(data['dob'])
+    data['age'] = dateex(output)[0]
     data['docType'] = "Driving Licence"
     data['address'] = addex(reg(output))
     data['bloodGroup'] = commonUtility.bloodGroup(output)
