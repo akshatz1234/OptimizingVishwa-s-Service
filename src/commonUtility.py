@@ -27,20 +27,23 @@ def dateex(output):
     In: Output from the OCR
     out: Date
     """
-    date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
-    if not date:
-        pass
-    else:
-        a = []
-        for i in date:
-            a.append(util_age.main(i))
-        f = a.index(max(a))
-        dob = date[f]
-        if max(a) == None:
-            return dob
+    try:
+        date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
+        if not date:
+            pass
         else:
-            return(max(a),dob)
-        
+            a = []
+            for i in date:
+                a.append(util_age.main(i))
+            f = a.index(max(a))
+            dob = date[f]
+            if max(a) == None:
+                return dob
+            else:
+                return(max(a),dob)
+    except:
+        return None
+
 def age(dob):
     if dob == "None":
         return "None"
