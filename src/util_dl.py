@@ -8,16 +8,19 @@ def dateex(output):
     In: Output from the OCR
     out: Date
     """
-    date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
-    if not date:
-        return(None,None)
-    else:
-        a = []
-        for i in date:
-            a.append(util_age.main(i))
-        f = a.index(max(a))
-        dob = date[f]
-        return(max(a),dob)
+    try:
+        date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
+        if not date:
+            return(None,None)
+        else:
+            a = []
+            for i in date:
+                a.append(util_age.main(i))
+            f = a.index(max(a))
+            dob = date[f]
+            return(max(a),dob)
+    except:
+        return None
 
 #registration number 
 def reg(output):

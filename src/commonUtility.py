@@ -39,11 +39,12 @@ def dateex(output):
 
 
 def age(dob):
-    if dob == "None":
-        return "None"
-    else:
-        return(util_age.main(dob))
-
+    try:
+        if dob == "None":
+            return "None"
+        else:
+            return(util_age.main(dob))
+    e
 def genex(tokenized_text):
     """
     In: OCR output Tokenized
