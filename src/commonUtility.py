@@ -44,7 +44,9 @@ def age(dob):
             return "None"
         else:
             return(util_age.main(dob))
-    e
+    except:
+        return None
+        
 def genex(tokenized_text):
     """
     In: OCR output Tokenized

@@ -15,12 +15,12 @@ def dateex(output):
             a = []
             for i in date:
                 a.append(util_age.main(i))
-            f = a.index(max(a))
+            f = a.index(min(a))
             dob = date[f]
-            if max(a) == None:
+            if min(a) == None:
                 return dob
             else:
-                return(max(a),dob)
+                return(min(a),dob)
     except:
         return None
 
@@ -29,8 +29,8 @@ def main_ex(output):
     classified_text = commonUtility.st.tag(tokenized_text)
     data = {}
     data['name'] = commonUtility.nameex(classified_text)
-    data['dob'] = dateex(output)[1]
-    data['age'] = dateex(output)[0]
+    data['dob'] = dateex(output)
+    data['age'] = dateex(output)
     data['docType'] = "Passport"
     data['gender'] = ""
     data['bloodGroup'] = ""
