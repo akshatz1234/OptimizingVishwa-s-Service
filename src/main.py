@@ -35,7 +35,7 @@ def preprocess(path):
     out.save("../project/t2.jpg")
     i = cv.imread("../project/t2.jpg",0)
     text = pytesseract.image_to_string(i, lang='eng')
-    # print(text)
+    #print(text)
     return(text)
 
 
@@ -45,7 +45,7 @@ def cat(out):
     if num is None:
         num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)#Pan card
         if num is None:
-            num = re.search("^[A-PR-WYa-pr-wy][1-9]\\d \\s?\\d{4}[1-9]$", out)# passport
+            num = re.search("IND", out)# passport
             if num is None:
                 num = re.search("ELECTION", out)# Voter ID
                 if num is None:
