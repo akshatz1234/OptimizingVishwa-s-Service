@@ -1,40 +1,9 @@
 import pytesseract
-from flask import Flask, request, Response
-import numpy as np
-from PIL import Image, ImageEnhance
 import cv2 as cv
-import re
-import imutils
-import util_aadhar
-import util_pan
-import util_dl
-import util_vi
-import util_pass
-import util_other
-
-def preprocess(path):
-    img = cv.imread(path,0)
-    blurred = cv.blur(img, (3,3))
-    canny = cv.Canny(blurred, 50, 200)
-    pts = np.argwhere(canny>0)
-    y1,x1 = pts.min(axis=0)
-    y2,x2 = pts.max(axis=0)
-    cropped = img[y1:y2, x1:x2]
-    imS = imutils.resize(cropped, width=950)
-    cv.imwrite('../project/temp1.jpg',imS);
-    image = Image.open('../project/temp1.jpg')
-    enhancer = ImageEnhance.Brightness(image)
-    enhanced_im = enhancer.enhance(1.7)
-    con = ImageEnhance.Contrast(enhanced_im)
-    con1 = con.enhance(1.3)
-    enhancer_object = ImageEnhance.Sharpness(con1)
-    out = enhancer_object.enhance(3)
-    out.save("../project/t2.jpg")
-    i = cv.imread("../project/t2.jpg",0)
-    text = pytesseract.image_to_string(i, lang='eng')
-    print(text)
-    return(text)
-
+import os
+import numpy as np
+from PIL import Image
+from flask import Flask, request, Response
 
 # categorization
 def cat(out):
@@ -71,18 +40,23 @@ ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 def allowed_file(file):
     return ('.' in file and file.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS)
 
-# main Function
 app = Flask(__name__)
-def rear():
-    f = request.files['file']
-    f.save("../project/temp1.jpg")
+@app.route('/temperature',methods = ['GET', 'POST'])
+def therm():
     try:
-        allowed_file(f)
-        img = Image.open(f)
-        img.load()
-        text = pytesseract.image_to_string(f)
-        print(text)
-        return cat('../project/temp1.jpg')
+        f = request.files['file']
+        while allowed_file(f):
+            f.save('../project/tem.jpg')
+            img = Image.open(f)
+            img.load()
+            text = pytesseract.image_to_string('../project/tem.jpg')
+            if text == "":
+                return "No text"
+            else:
+                return text
+            break
     except:
-        return "Cannot read file"
-    
+        return "Not readable"
+if __name__ == "__main__":
+    app.debug = True
+    app.run(host = '127.0.0.1',port=5000, threaded = False)
