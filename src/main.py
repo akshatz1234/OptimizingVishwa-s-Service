@@ -1,6 +1,3 @@
-import time
-startTime=time.time()
-endTime = time.time()
 import pytesseract
 from flask import Flask, request, Response
 import numpy as np
@@ -79,12 +76,11 @@ app = Flask(__name__)
 def rear():
     f = request.files['file']
     f.save("../project/temp1.jpg")
-    # try:
-    startTime
-    allowed_file(f)
-    img = Image.open(f)
-    img.load()
-    return cat(preprocess('../project/temp1.jpg')) 
-    # except:
-    #     return "Cannot read file"
+    try:
+        allowed_file(f)
+        img = Image.open(f)
+        img.load()
+        return cat(preprocess('../project/temp1.jpg')) 
+    except:
+        return "Cannot read file"
     
