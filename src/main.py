@@ -41,8 +41,8 @@ def cat(out):
     num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)#aadhaar card
     if num is None:
         num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)#Pan card
-        if num is None:
-            num = re.search("IND", out)# passport
+        if re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out) is None:
+            num = re.search("[A-Z]{1}[0-9]{6}", out)# passport
             if num is None:
                 num = re.search("ELECTION", out)# Voter ID
                 if num is None:
