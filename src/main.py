@@ -14,7 +14,7 @@ import util_other
 
 def preprocess(path):
     img = cv.imread(path,0)
-    blurred = cv.blur(img, (3,3))
+    blurred = cv.blur(img, (5,5))
     canny = cv.Canny(blurred, 50, 200)
     pts = np.argwhere(canny>0)
     y1,x1 = pts.min(axis=0)
@@ -32,7 +32,7 @@ def preprocess(path):
     out.save("../project/t2.jpg")
     i = cv.imread("../project/t2.jpg",0)
     text = pytesseract.image_to_string(i, lang='eng')
-    #print(text)
+    # print(text)
     return(text)
 
 
@@ -41,8 +41,8 @@ def cat(out):
     num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)#aadhaar card
     if num is None:
         num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)#Pan card
-        if num is None:
-            num = re.search("IND", out)# passport
+        if re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out) is None:
+            num = re.search("[A-Z]{1}[0-9]{6}", out)# passport
             if num is None:
                 num = re.search("ELECTION", out)# Voter ID
                 if num is None:
@@ -63,7 +63,6 @@ def cat(out):
             return(util_pan.main_ex(out))
     else:
         return(util_aadhar.main_ex(out))
-
 # allowed filenames
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 
