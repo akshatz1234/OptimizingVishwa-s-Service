@@ -13,7 +13,7 @@ import util_pass
 import util_other
 
 def preprocess(path):
-    img = cv.imread(path,0)
+    # img = cv.imread(path,0)
     # blurred = cv.blur(img, (5,5))
     # canny = cv.Canny(blurred, 50, 200)
     # pts = np.argwhere(canny>0)
@@ -30,7 +30,7 @@ def preprocess(path):
     # enhancer_object = ImageEnhance.Sharpness(con1)
     # out = enhancer_object.enhance(3)
     # out.save("../project/t2.jpg")
-    i = cv.imread("../project/t2.jpg",0)
+    i = cv.imread("../project/temp1.jpg",0)
     text = pytesseract.image_to_string(i, lang='eng')
     # print(text)
     return(text)
