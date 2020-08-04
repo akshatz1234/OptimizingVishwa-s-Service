@@ -42,31 +42,21 @@ def preprocess(path):
 
 # categorization
 def cat(out):
-    num = re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out)#aadhaar card
-    if num is None:
-        num = re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out)#Pan card
-        if re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out) is None:
-            num = re.search("[A-Z]{1}[0-9]{6}", out)# passport
-            if num is None:
-                num = re.search("ELECTION", out)# Voter ID
-                if num is None:
-                    num = re.search("([A-Z]{2}[0-9]{2} [0-9]{11})", out)#driving license
-                    if num is None:
-                        word = re.search("Permanent",out)# PAN card
-                        if word is None:
-                            return(util_other.main_ex(out))
-                        else:
-                            return(util_pan.main_ex(out))
-                    else:
-                        return(util_dl.main_ex(out))
-                else:
-                    return(util_vi.main_ex(out))
-            else:
-                return(util_pass.main_ex(out))
+    try:
+        if re.search("([0-9]{4}\ [0-9]{4}\ [0-9]{4})", out):# Aadhaar card
+            return(util_aadhar.main_ex(out))
+        elif re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out):# pan card
+            return util_pan.main_ex(out)
+        elif re.search("ELECTION", out): # Voter ID
+            return(util_vi.main_ex(out))
+        elif re.search("[A-Z]{1}[0-9]{6}", out):# passport
+            return(util_pass.main_ex(out))
+        elif re.search("([A-Z]{2}[0-9]{2} [0-9]{11})", out):#driving license
+            return(util_dl.main_ex(out))
         else:
-            return(util_pan.main_ex(out))
-    else:
-        return(util_aadhar.main_ex(out))
+            return(util_other.main_ex(out))
+    except:
+        return "No Match"
 # allowed filenames
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 
