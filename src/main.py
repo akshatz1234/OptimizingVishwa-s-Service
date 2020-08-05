@@ -12,6 +12,7 @@ import util_vi
 import util_pass
 import util_other
 
+#preprocess
 def preprocess(path):
     img = cv.imread(path,0)
     blurred = cv.blur(img, (5,5))
@@ -47,7 +48,7 @@ def cat(out):
             return(util_aadhar.main_ex(out))
         elif re.search("([A-Z]{5}[0-9]{4}[A-Z]{1})", out):# pan card
             return util_pan.main_ex(out)
-        elif re.search("ELECTION", out): # Voter ID
+        elif re.search("ELECTION", out): # Election ID
             return(util_vi.main_ex(out))
         elif re.search("[A-Z]{1}[0-9]{6}", out):# passport
             return(util_pass.main_ex(out))
