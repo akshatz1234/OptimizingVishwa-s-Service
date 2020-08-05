@@ -62,11 +62,11 @@ def main_ex(output):
     tokenized_text = commonUtility.word_tokenize(output)
     classified_text = commonUtility.st.tag(tokenized_text)
     data = {}
+    data['docType'] = "Driving Licence"
     data['name'] = commonUtility.nameex(classified_text)
     data['dob'] = dateex(output)[1]
     # print(data['dob'])
     data['age'] = dateex(output)[0]
-    data['docType'] = "Driving Licence"
     data['address'] = addex(reg(output))
     data['bloodGroup'] = commonUtility.bloodGroup(output)
     return commonUtility.jsonify(data)

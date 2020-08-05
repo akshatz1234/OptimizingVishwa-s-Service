@@ -3,10 +3,10 @@ import re
 
 def docType(output):
     emp = re.search("Employee|EMPLOYEE", output)
-    if emp is None:
-        return(None)
-    else:
+    if emp:
         return("Employee_id")
+    else:
+        return(None)
 
 
 def main_ex(output):
