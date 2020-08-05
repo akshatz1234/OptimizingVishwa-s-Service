@@ -16,10 +16,10 @@ def nameex(txt):
     In: Classified text from StanfordNER
     Out: Name
     """
-    for tag, chunk in groupby(txt, lambda x:x[1]):
-        if tag != "O" and tag == 'PERSON':
-            a=" ".join(w for w, t in chunk)
-            return(a)
+    for token, tag in groupby(txt, lambda x:x[1]):
+        if token == 'PERSON' and token !="O":
+            return " ".join(str(x) for x, t in tag)
+            break
 
 # date extraction
 def dateex(output):
