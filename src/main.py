@@ -16,19 +16,19 @@ def preprocess(path):
     img = cv.imread(path,0)
     blurred = cv.blur(img, (5,5))
     canny = cv.Canny(blurred, 50, 200)
-    pts = np.argwhere(canny>0)
+    pts = np.argwhere(canny>0)#edges of document
     y1,x1 = pts.min(axis=0)
     y2,x2 = pts.max(axis=0)
-    cropped = img[y1:y2, x1:x2]
-    imS = imutils.resize(cropped, width=950)
-    cv.imwrite('../project/temp1.jpg',imS);
-    image = Image.open('../project/temp1.jpg')
-    enhancer = ImageEnhance.Brightness(image)
-    enhanced_im = enhancer.enhance(1.7)
-    con = ImageEnhance.Contrast(enhanced_im)
-    con1 = con.enhance(1.3)
-    enhancer_object = ImageEnhance.Sharpness(con1)
-    out = enhancer_object.enhance(3)
+    cropped = img[y1:y2, x1:x2]# cropping 
+    imS = imutils.resize(cropped, width=950)# resizing
+    cv.imwrite('../project/temp1.jpg',imS)#rewrite image
+    image = Image.open('../project/temp1.jpg')# open image
+    enhancer = ImageEnhance.Brightness(image)#brightness
+    enhanced_im = enhancer.enhance(1.7)#enhance image
+    con = ImageEnhance.Contrast(enhanced_im)#contrast 
+    con1 = con.enhance(1.3)# enhance
+    enhancer_object = ImageEnhance.Sharpness(con1)#sharpness
+    out = enhancer_object.enhance(3)#enhance
     out.save("../project/t2.jpg")
     i = cv.imread("../project/t2.jpg",0)
     text = pytesseract.image_to_string(i, lang='eng')
@@ -56,7 +56,7 @@ def cat(out):
         else:
             return(util_other.main_ex(out))
     except:
-        return "No Match"
+        return "No Matching regex"
 # allowed filenames
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 
