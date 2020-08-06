@@ -46,24 +46,24 @@ def addex(c3):
     In: Proccesed text
     Out: Address
     """
-    # try:
-    tkn_add = commonUtility.word_tokenize(reg(c3))
-    print(tkn_add)
-    add = " "
-    y = 0
-    pin = re.compile('^\d{6}$')
-    for i in tkn_add:
-        # print(i)
-        p = pin.search(i)
-        if y == 1:
-            add += i + ' '
-        if i == 'ADDRESS' or i == 'Address' or i == 'Add':
-            y = 1
-        elif p is not None:
-            y = 0
-    return(add)
-    # except:
-        # return "None"
+    try:
+        tkn_add = commonUtility.word_tokenize(reg(c3))
+        print(tkn_add)
+        add = " "
+        y = 0
+        pin = re.compile('^\d{6}$')
+        for i in tkn_add:
+            # print(i)
+            p = pin.search(i)
+            if y == 1:
+                add += i + ' '
+            if i == 'ADDRESS' or i == 'Address' or i == 'Add':
+                y = 1
+            elif p is not None:
+                y = 0
+        return(add)
+    except:
+        return "None"
         
 def main_ex(output):
     tokenized_text = commonUtility.word_tokenize(output)
