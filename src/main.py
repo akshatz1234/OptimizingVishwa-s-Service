@@ -55,7 +55,6 @@ def cat(out):
         elif re.search("[A-Z]{2}[0-9]{2} [0-9]{11}", out): #driving license
             return(util_dl.main_ex(out))
         elif re.search("\b[A-Z]{1}[0-9]{6}\b", out):# passport
-            print("DL")
             return(util_pass.main_ex(out))
         return(util_other.main_ex(out))
     except:
