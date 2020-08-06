@@ -11,25 +11,17 @@ st = st('../resources/english.conll.4class.distsim.crf.ser.gz',
                        encoding='utf-8')
 
 # name extraction
-def nameex(txt):
-    """
-    In: Classified text from StanfordNER
-    Out: Name
-    """
+def nameex(output):
     try:
-        continuous_chunk = []
-        current_chunk = []
-        for token, tag in txt:
-            if tag == "PERSON": 
-                current_chunk.append(token)
-            else:
-                if current_chunk: 
-                    continuous_chunk.append(current_chunk)
-        if current_chunk:
-            current_chunk = " ".join(str(x) for x in current_chunk)
-            return current_chunk
+        for tag, chunk in groupby(output, lambda x:x[1]):
+            if tag == 'PERSON':
+                # print( " ".join(w for w, t in chunk))
+                return " ".join(w for w, t in chunk)
     except:
         return "None"
+
+
+
 # date extraction
 def dateex(output):
     """
@@ -57,7 +49,7 @@ def age(dob):
         else:
             return(util_age.main(dob))
     except:
-        return None
+        return "None"
         
 def genex(tokenized_text):
     """
@@ -73,15 +65,15 @@ def genex(tokenized_text):
             if female is not None:
                 return "Female"
     except:
-        return "None"
+        return "No output"
 
 def bloodGroup(output):
     try:
         regex = r"\bB\+|\bB-|\bA\+|\bA-|\bAB\+|\bAB-|\bO\+|\bO-"
         bg = re.search(regex, output)
-        if bg is None:
-            return("None")
-        else:
+        if bg:
             return(bg.group(0))
+        else:
+            return("None")
     except:
         return "None"

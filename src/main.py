@@ -46,20 +46,21 @@ def preprocess(path):
 # categorization
 def cat(out):
     try:
-        if re.search("[0-9]{4}\ [0-9]{4}\ [0-9]{4}", out):# Aadhaar card
+        if re.search("[0-9]{4}\ [0-9]{4}\ [0-9]{4}", out): # Aadhaar card
             return(util_aadhar.main_ex(out))
-        elif re.search("[A-Z]{5}[0-9]{4}[A-Z]{1}", out):# pan card
+        elif re.search("[A-Z]{5}[0-9]{4}[A-Z]{1}", out) or re.search("PERMANENT", out): # pan card
             return util_pan.main_ex(out)
         elif re.search("ELECTION", out): # Election ID
             return(util_vi.main_ex(out))
-        elif re.search("[A-Z]{2}[0-9]{2} [0-9]{11}", out):#driving license
+        elif re.search("[A-Z]{2}[0-9]{2} [0-9]{11}", out): #driving license
             return(util_dl.main_ex(out))
         elif re.search("\b[A-Z]{1}[0-9]{6}\b", out):# passport
+            print("DL")
             return(util_pass.main_ex(out))
-        else:
-            return(util_other.main_ex(out))
+        return(util_other.main_ex(out))
     except:
         return "No Matching regex"
+
 # allowed filenames
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 
