@@ -8,6 +8,7 @@ def dateex(output):
     In: Output from the OCR
     out: Date
     """
+    # print(output)
     try:
         date = re.findall("([0-9]{2}\/[0-9]{2}\/[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})", output)
         if not date:
@@ -46,34 +47,30 @@ def addex(c3):
     In: Proccesed text
     Out: Address
     """
+    # print(c3)
     try:
         tkn_add = commonUtility.word_tokenize(reg(c3))
-        print(tkn_add)
         add = " "
         y = 0
         pin = re.compile('^\d{6}$')
         for i in tkn_add:
-            # print(i)
             p = pin.search(i)
             if y == 1:
                 add += i + ' '
-            if i == 'ADDRESS' or i == 'Address' or i == 'Add':
+            if i == 'ADDRESS' or i == 'Add':
                 y = 1
-            elif p is not None:
-                y = 0
         return(add)
     except:
         return "None"
-        
+
 def main_ex(output):
     tokenized_text = commonUtility.word_tokenize(output)
     classified_text = commonUtility.st.tag(tokenized_text)
     data = {}
     data['docType'] = "Driving Licence"
     data['name'] = commonUtility.nameex(classified_text)
-    data['dob'] = dateex(output)[1]
-    # print(data['dob'])
     data['age'] = dateex(output)[0]
-    data['address'] = addex(reg(output))
+    data['dob'] = dateex(output)[1]
+    # data['address'] = addex(reg(output))
     data['bloodGroup'] = commonUtility.bloodGroup(output)
     return commonUtility.jsonify(data)

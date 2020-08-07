@@ -5,9 +5,6 @@ def docType(output):
     emp = re.search("Employee|EMPLOYEE", output)
     if emp:
         return("Employee_id")
-    else:
-        return(None)
-
 
 def main_ex(output):
     tokenized_text = commonUtility.word_tokenize(output)
